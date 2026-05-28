@@ -55,7 +55,7 @@
 
 ### Ответ:
 
-Для того, чтобы создать ВМ в другой зоне доступности, необходимо создать также новую подсеть в этой зоне. Объявил переменные в файле 'vms_platform.tf' и добавил блок ресурса **"netology-develop-platform-db"** в файле 'main.tf'.
+Для того, чтобы создать ВМ в другой зоне доступности, необходимо создать также новую подсеть в этой зоне. Объявил переменные в файле `vms_platform.tf` и добавил блок ресурса **"netology-develop-platform-db"** в файле `main.tf`.
 
 Файл с переменными 'vms_platform.tf':
 
@@ -96,7 +96,7 @@ variable "vm_db_cidr" {
 }
 ```
 
-Часть кода из 'main.tf' для создания ВМ **"netology-develop-platform-db"**:
+Часть кода из `main.tf` для создания ВМ **"netology-develop-platform-db"**:
 
 ```hcl
 resource "yandex_vpc_subnet" "db" {
@@ -155,7 +155,7 @@ resource "yandex_compute_instance" "platform_db" {
 
 ### Ответ:
 
-Создал 'locals.tf', описал в нем следующие переменные:
+Создал `locals.tf`, описал в нем следующие переменные:
 
 ```hcl
 locals {
@@ -167,7 +167,7 @@ locals {
 }
 ```
 
-Заменил в 'main.tf' переменные из 'variables.tf' и 'vms_platform.tf' на local-переменные:
+Заменил в `main.tf` переменные из `variables.tf` и `vms_platform.tf` на local-переменные:
 
 ```hcl
 ...
@@ -178,7 +178,7 @@ resource "yandex_compute_instance" "platform_db" {
   name        = local.vm_db_name
 ```
 
-Результат выполнения команды 'terraform apply':
+Результат выполнения команды `terraform apply`:
 
 ![5]()
 
@@ -220,7 +220,7 @@ resource "yandex_compute_instance" "platform_db" {
 
 ### Ответ:
 
-В файл 'variables.tf' добавил следующие переменные:
+В файл `variables.tf` добавил следующие переменные:
 
 ```hcl
 variable "vm_resources" {
@@ -248,7 +248,7 @@ variable "metadata" {
 }
 ```
 
-Закомментировал следующие переменные в файле 'variables.tf':
+Закомментировал следующие переменные в файле `variables.tf`:
 
 ```hcl
 # variable "vm_web_name" {
@@ -270,7 +270,7 @@ variable "metadata" {
 # }
 ```
 
-Закомментировал следующие переменные в файле 'vms_platform.tf':
+Закомментировал следующие переменные в файле `vms_platform.tf`:
 
 ```hcl
 # variable "vm_db_name" {
@@ -287,7 +287,7 @@ variable "metadata" {
 # }
 ```
 
-Вывод команды 'terrform plan':
+Вывод команды `terrform plan`:
 
 ![6]()
 
@@ -341,7 +341,7 @@ test = [
 
 ### Ответ:
 
-Вывел описание сетей из 'main.tf' в 'networks.tf' и добавил блоки nat_gateway. Получился такой файл:
+Вывел описание сетей из `main.tf` в `networks.tf` и добавил блоки **nat_gateway** и **route_table**. Получился такой файл:
 
 ```hcl
 resource "yandex_vpc_network" "develop" {
@@ -380,7 +380,7 @@ resource "yandex_vpc_route_table" "rt" {
 }
 ```
 
-Предварительно поменял пароли на обеих машинах, выполнил команду 'terraform apply', зашел в серийную консоль обеих машин, выполнил команду 'ping 8.8.8.8':
+Предварительно поменял пароли на обеих машинах, выполнил команду `terraform apply`, зашел в серийную консоль обеих машин, выполнил команду `ping 8.8.8.8`:
 
 ![9-1]()
 
