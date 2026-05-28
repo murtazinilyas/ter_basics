@@ -1,14 +1,36 @@
 ###cloud vars
-
-
 variable "cloud_id" {
   type        = string
-  description = "https://cloud.yandex.ru/docs/resource-manager/operations/cloud/get-id"
+  default = "b1geap6dpsnun6sh70qj"
 }
 
 variable "folder_id" {
   type        = string
-  description = "https://cloud.yandex.ru/docs/resource-manager/operations/folder/get-id"
+  default = "b1gfjo6em0ve76o982vg"
+}
+
+variable "vm_web_image_id" {
+  type        = string
+  default = "ubuntu-2004-lts"
+}
+
+variable "vm_web_name" {
+  type        = string
+  default = "netology-develop-platform-web"
+}
+
+variable "vm_web_platform_id" {
+  type        = string
+  default = "standard-v4a"
+}
+
+variable "vm_web_resources" {
+  type = map(number)
+  default = {
+    cores         = 2
+    memory        = 1
+    core_fraction = 20
+  }
 }
 
 variable "default_zone" {
