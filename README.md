@@ -13,10 +13,10 @@
 
 Найдены следующие ошибки:
 
-  1. Не были указаны переменные cloud_id и folder_id
-  2. Неправильно указан параметр platform_id, standart_v4 допущена лексическая ошибка. Платформа standard_v4 не была найдена, можно изменить на standard_v1 (процессор Intel Broadwell), standard_v2 (Intel Cascade Lake), standard_v3 (Intel Ice Lake) или standard_v4a (AMD Zen 4)
-  3. Неправильно указан параметр core_fraction - допустимые значения для платформы standard_v4a 20, 50 или 100 (гарантированная доля vCPU, %)
-  4. Неправильно указан параметр cores - допустимые значения 2 или 4 (количество vCPU)
+  - Не были указаны переменные cloud_id и folder_id
+  - Неправильно указан параметр platform_id, standart_v4 допущена лексическая ошибка. Платформа standard_v4 не была найдена, можно изменить на standard_v1 (процессор Intel Broadwell), standard_v2 (Intel Cascade Lake), standard_v3 (Intel Ice Lake) или standard_v4a (AMD Zen 4)
+  - Неправильно указан параметр core_fraction - допустимые значения для платформы standard_v4a 20, 50 или 100 (гарантированная доля vCPU, %)
+  - Неправильно указан параметр cores - допустимые значения 2 или 4 (количество vCPU)
 
 5. Подключитесь к консоли ВМ через ssh и выполните команду ``` curl ifconfig.me```.
 Примечание: К OS ubuntu "out of a box, те из коробки" необходимо подключаться под пользователем ubuntu: ```"ssh ubuntu@vm_ip_address"```. Предварительно убедитесь, что ваш ключ добавлен в ssh-агент: ```eval $(ssh-agent) && ssh-add``` Вы познакомитесь с тем как при создании ВМ создать своего пользователя в блоке metadata в следующей лекции.;
