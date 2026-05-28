@@ -14,22 +14,38 @@ variable "vm_web_image_id" {
   default = "ubuntu-2004-lts"
 }
 
-variable "vm_web_name" {
-  type        = string
-  default = "netology-develop-platform-web"
-}
+# variable "vm_web_name" {
+#   type        = string
+#   default = "netology-develop-platform-web"
+# }
 
 variable "vm_web_platform_id" {
   type        = string
   default = "standard-v4a"
 }
 
-variable "vm_web_resources" {
-  type = map(number)
+# variable "vm_web_resources" {
+#   type = map(number)
+#   default = {
+#     cores         = 2
+#     memory        = 1
+#     core_fraction = 20
+#   }
+# }
+
+variable "vm_resources" {
+  type = map(any)
   default = {
+    web = {
     cores         = 2
     memory        = 1
     core_fraction = 20
+    }
+    db = {
+    cores         = 2
+    memory        = 2
+    core_fraction = 20
+    }
   }
 }
 
@@ -50,11 +66,17 @@ variable "vpc_name" {
   description = "VPC network & subnet name"
 }
 
-
+variable "metadata" {
+  type = map(string)
+  default = {
+    serial-port-enable = 1
+    ssh-keys = "ubuntu:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSToR3JR5gmXkTtgSvCezhJDOxkcG2H02REWf1WZye7 ilyas-murtazin@mia-vb"
+  }
+}
 ###ssh vars
 
-variable "vms_ssh_root_key" {
-  type        = string
-  default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSToR3JR5gmXkTtgSvCezhJDOxkcG2H02REWf1WZye7 ilyas-murtazin@mia-vb"
-  description = "ssh-keygen -t ed25519"
-}
+# variable "vms_ssh_root_key" {
+#   type        = string
+#   default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSToR3JR5gmXkTtgSvCezhJDOxkcG2H02REWf1WZye7 ilyas-murtazin@mia-vb"
+#   description = "ssh-keygen -t ed25519"
+# }
