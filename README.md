@@ -25,11 +25,11 @@
 
 Скриншот ЛК Yandex Cloud:
 
-![1-6.1]()
+![1-6.1](https://github.com/murtazinilyas/ter_basics/blob/main/screenshots/t1-6.1.png)
 
 Вывод команды ``` curl ifconfig.me```:
 
-![t1-6.2]()
+![t1-6.2](https://github.com/murtazinilyas/ter_basics/blob/main/screenshots/t1-6.2.png)
 
 7. Ответьте, как в процессе обучения могут пригодиться параметры ```preemptible = true``` и ```core_fraction=5``` в параметрах ВМ.
 
@@ -45,7 +45,7 @@
 
 ### Ответ:
 
-![t2]()
+![t2](https://github.com/murtazinilyas/ter_basics/blob/main/screenshots/t2.png)
 
 ### Задание 3
 
@@ -136,6 +136,10 @@ resource "yandex_compute_instance" "platform_db" {
 }
 ```
 
+Скриншот ЛК Yandex Cloud'а где видно, что созданная машина находится в зоне доступности ru-central1-b:
+
+![3](https://github.com/murtazinilyas/ter_basics/blob/main/screenshots/t3.png)
+
 ### Задание 4
 
 1. Объявите в файле outputs.tf **один** output , содержащий: instance_name, external_ip, fqdn для каждой из ВМ в удобном лично для вас формате.(без хардкода!!!)
@@ -145,7 +149,7 @@ resource "yandex_compute_instance" "platform_db" {
 
 ### Ответ:
 
-![4]()
+![4](https://github.com/murtazinilyas/ter_basics/blob/main/screenshots/t4.png)
 
 ### Задание 5
 
@@ -180,7 +184,7 @@ resource "yandex_compute_instance" "platform_db" {
 
 Результат выполнения команды 'terraform apply':
 
-![5]()
+![5](https://github.com/murtazinilyas/ter_basics/blob/main/screenshots/t5.png)
 
 ### Задание 6
 
@@ -289,7 +293,7 @@ variable "metadata" {
 
 Вывод команды 'terrform plan':
 
-![6]()
+![6](https://github.com/murtazinilyas/ter_basics/blob/main/screenshots/t6.png)
 
 ### Задание 7*
 
@@ -326,7 +330,7 @@ variable "metadata" {
 
 Вывод всех введенных команд:
 
-![7]()
+![7](https://github.com/murtazinilyas/ter_basics/blob/main/screenshots/t7.png)
 
 ------
 
@@ -387,7 +391,7 @@ tuple([
 
 Чтобы вычленить необходимую сроку ввел команду `local.test.0.dev1.0`:
 
-![8]()
+![8](https://github.com/murtazinilyas/ter_basics/blob/main/screenshots/t8.png)
 
 ------
 
@@ -436,8 +440,8 @@ resource "yandex_vpc_route_table" "rt" {
 }
 ```
 
-Предварительно поменял пароли на обеих машинах, выполнил команду 'terraform apply', зашел в серийную консоль обеих машин, выполнил команду 'ping 8.8.8.8':
+Предварительно поменял пароли на обеих машинах, выполнил команду 'terraform apply', зашел в серийную консоль обеих машин, выполнил команды `ip a` и `ping 8.8.8.8`:
 
-![9-1]()
+![9-1](https://github.com/murtazinilyas/ter_basics/blob/main/screenshots/t9-1.png)
 
-![9-2]()
+![9-2](https://github.com/murtazinilyas/ter_basics/blob/main/screenshots/t9-2.png)
