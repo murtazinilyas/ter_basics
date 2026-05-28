@@ -1,13 +1,3 @@
-resource "yandex_vpc_network" "develop" {
-  name = var.vpc_name
-}
-resource "yandex_vpc_subnet" "develop" {
-  name           = var.vpc_name
-  zone           = var.default_zone
-  network_id     = yandex_vpc_network.develop.id
-  v4_cidr_blocks = var.default_cidr
-}
-
 data "yandex_compute_image" "ubuntu" {
   family = var.vm_web_image_id
 }
@@ -29,18 +19,11 @@ resource "yandex_compute_instance" "platform" {
   }
   network_interface {
     subnet_id = yandex_vpc_subnet.develop.id
-    nat       = true
+    nat       = false
   }
 
   metadata = var.metadata
 
-}
-
-resource "yandex_vpc_subnet" "db" {
-  name           = var.vm_db_vpc_name
-  zone           = var.vm_db_zone
-  network_id     = yandex_vpc_network.develop.id
-  v4_cidr_blocks = var.vm_db_cidr
 }
 
 resource "yandex_compute_instance" "platform_db" {
@@ -62,7 +45,7 @@ resource "yandex_compute_instance" "platform_db" {
   }
   network_interface {
     subnet_id = yandex_vpc_subnet.db.id
-    nat       = true
+    nat       = false
   }
 
   metadata = var.metadata
