@@ -43,6 +43,9 @@
 2. Объявите нужные переменные в файле variables.tf, обязательно указывайте тип переменной. Заполните их **default** прежними значениями из main.tf. 
 3. Проверьте terraform plan. Изменений быть не должно. 
 
+### Ответ:
+
+![t2]()
 
 ### Задание 3
 
@@ -50,6 +53,88 @@
 2. Скопируйте блок ресурса и создайте с его помощью вторую ВМ в файле main.tf: **"netology-develop-platform-db"** ,  ```cores  = 2, memory = 2, core_fraction = 20```. Объявите её переменные с префиксом **vm_db_** в том же файле ('vms_platform.tf').  ВМ должна работать в зоне "ru-central1-b"
 3. Примените изменения.
 
+### Ответ:
+
+Для того, чтобы создать ВМ в другой зоне доступности, необходимо создать также новую подсеть в этой зоне. Объявил переменные в файле 'vms_platform.tf' и добавил блок ресурса **"netology-develop-platform-db"** в файле 'main.tf'.
+
+Файл с переменными 'vms_platform.tf':
+
+```hcl
+variable "vm_db_name" {
+  type        = string
+  default     = "netology-develop-platform-db"
+}
+
+variable "vm_db_platform_id" {
+  type        = string
+  default     = "standard-v4a"
+}
+
+variable "vm_db_resources" {
+  type = map(number)
+  default = {
+    cores         = 2
+    memory        = 2
+    core_fraction = 20
+  }
+}
+
+variable "vm_db_zone" {
+  type        = string
+  default     = "ru-central1-b"
+}
+
+variable "vm_db_vpc_name" {
+  type        = string
+  default     = "db"
+  description = "VPC network & subnet name"
+}
+
+variable "vm_db_cidr" {
+  type        = list(string)
+  default     = ["10.0.2.0/24"]
+}
+```
+
+Часть кода из 'main.tf' для создания ВМ **"netology-develop-platform-db"**:
+
+```hcl
+resource "yandex_vpc_subnet" "db" {
+  name           = var.vm_db_vpc_name
+  zone           = var.vm_db_zone
+  network_id     = yandex_vpc_network.develop.id
+  v4_cidr_blocks = var.vm_db_cidr
+}
+
+resource "yandex_compute_instance" "platform_db" {
+  name        = var.vm_db_name
+  platform_id = var.vm_db_platform_id
+  zone        = var.vm_db_zone
+  resources {
+    cores         = var.vm_db_resources.cores
+    memory        = var.vm_db_resources.memory
+    core_fraction = var.vm_db_resources.core_fraction
+  }
+  boot_disk {
+    initialize_params {
+      image_id = data.yandex_compute_image.ubuntu.image_id
+    }
+  }
+  scheduling_policy {
+    preemptible = true
+  }
+  network_interface {
+    subnet_id = yandex_vpc_subnet.db.id
+    nat       = true
+  }
+
+  metadata = {
+    serial-port-enable = 1
+    ssh-keys           = "ubuntu:${var.vms_ssh_root_key}"
+  }
+
+}
+```
 
 ### Задание 4
 
@@ -58,6 +143,9 @@
 
 В качестве решения приложите вывод значений ip-адресов команды ```terraform output```.
 
+### Ответ:
+
+![4]()
 
 ### Задание 5
 
@@ -65,6 +153,34 @@
 2. Замените переменные внутри ресурса ВМ на созданные вами local-переменные.
 3. Примените изменения.
 
+### Ответ:
+
+Создал 'locals.tf', описал в нем следующие переменные:
+
+```hcl
+locals {
+  project     = "develop-platform"
+  env1        = "web"
+  env2        = "db"
+  vm_web_name = "netology-${local.project}-${local.env1}"
+  vm_db_name  = "netology-${local.project}-${local.env2}"
+}
+```
+
+Заменил в 'main.tf' переменные из 'variables.tf' и 'vms_platform.tf' на local-переменные:
+
+```hcl
+...
+resource "yandex_compute_instance" "platform" {
+  name        = local.vm_web_name
+...
+resource "yandex_compute_instance" "platform_db" {
+  name        = local.vm_db_name
+```
+
+Результат выполнения команды 'terraform apply':
+
+![5]()
 
 ### Задание 6
 
@@ -102,15 +218,79 @@
 5. Найдите и закоментируйте все, более не используемые переменные проекта.
 6. Проверьте terraform plan. Изменений быть не должно.
 
-------
+### Ответ:
 
-## Дополнительное задание (со звёздочкой*)
+В файл 'variables.tf' добавил следующие переменные:
 
-**Настоятельно рекомендуем выполнять все задания со звёздочкой.**   
-Они помогут глубже разобраться в материале. Задания со звёздочкой дополнительные, не обязательные к выполнению и никак не повлияют на получение вами зачёта по этому домашнему заданию. 
+```hcl
+variable "vm_resources" {
+  type = map(any)
+  default = {
+    web = {
+    cores         = 2
+    memory        = 1
+    core_fraction = 20
+    }
+    db = {
+    cores         = 2
+    memory        = 2
+    core_fraction = 20
+    }
+  }
+}
 
+variable "metadata" {
+  type = map(string)
+  default = {
+    serial-port-enable = 1
+    ssh-keys = "ubuntu:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSToR3JR5gmXkTtgSvCezhJDOxkcG2H02REWf1WZye7 ilyas-murtazin@mia-vb"
+  }
+}
+```
 
-------
+Закомментировал следующие переменные в файле 'variables.tf':
+
+```hcl
+# variable "vm_web_name" {
+#   type        = string
+#   default = "netology-develop-platform-web"
+# }
+# variable "vm_web_resources" {
+#   type = map(number)
+#   default = {
+#     cores         = 2
+#     memory        = 1
+#     core_fraction = 20
+#   }
+# }
+# variable "vms_ssh_root_key" {
+#   type        = string
+#   default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSToR3JR5gmXkTtgSvCezhJDOxkcG2H02REWf1WZye7 ilyas-murtazin@mia-vb"
+#   description = "ssh-keygen -t ed25519"
+# }
+```
+
+Закомментировал следующие переменные в файле 'vms_platform.tf':
+
+```hcl
+# variable "vm_db_name" {
+#   type        = string
+#   default     = "netology-develop-platform-db"
+# }
+# variable "vm_db_resources" {
+#   type = map(number)
+#   default = {
+#     cores         = 2
+#     memory        = 2
+#     core_fraction = 20
+#   }
+# }
+```
+
+Вывод команды 'terrform plan':
+
+![6]()
+
 ### Задание 7*
 
 Изучите содержимое файла console.tf. Откройте terraform console, выполните следующие задания: 
@@ -158,3 +338,50 @@ test = [
 ### Задание 9*
 
 Используя инструкцию https://cloud.yandex.ru/ru/docs/vpc/operations/create-nat-gateway#tf_1, настройте для ваших ВМ nat_gateway. Для проверки уберите внешний IP адрес (nat=false) у ваших ВМ и проверьте доступ в интернет с ВМ, подключившись к ней через serial console. Для подключения предварительно через ssh измените пароль пользователя: ```sudo passwd ubuntu```
+
+### Ответ:
+
+Вывел описание сетей из 'main.tf' в 'networks.tf' и добавил блоки nat_gateway. Получился такой файл:
+
+```hcl
+resource "yandex_vpc_network" "develop" {
+  name = var.vpc_name
+}
+
+resource "yandex_vpc_subnet" "develop" {
+  name           = var.vpc_name
+  zone           = var.default_zone
+  network_id     = yandex_vpc_network.develop.id
+  v4_cidr_blocks = var.default_cidr
+  route_table_id = yandex_vpc_route_table.rt.id
+}
+
+resource "yandex_vpc_subnet" "db" {
+  name           = var.vm_db_vpc_name
+  zone           = var.vm_db_zone
+  network_id     = yandex_vpc_network.develop.id
+  v4_cidr_blocks = var.vm_db_cidr
+  route_table_id = yandex_vpc_route_table.rt.id
+}
+
+resource "yandex_vpc_gateway" "nat_gateway" {
+  name = var.vpc_name
+  shared_egress_gateway {}
+}
+
+resource "yandex_vpc_route_table" "rt" {
+  name       = var.vpc_name
+  network_id = yandex_vpc_network.develop.id
+
+  static_route {
+    destination_prefix = "0.0.0.0/0"
+    gateway_id         = yandex_vpc_gateway.nat_gateway.id
+  }
+}
+```
+
+Предварительно поменял пароли на обеих машинах, выполнил команду 'terraform apply', зашел в серийную консоль обеих машин, выполнил команду 'ping 8.8.8.8':
+
+![9-1]()
+
+![9-2]()
